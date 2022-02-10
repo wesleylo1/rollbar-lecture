@@ -4,6 +4,7 @@ const express = require('express')
 const app = express()
 
 const path = require('path') // provides utility for working with file and directory paths, provided by Node
+const { send } = require('process')
 
 // rollbar - need to install rollbar from npm before using it
 
@@ -35,6 +36,20 @@ app.post('/api/students', (req,res) => {
     students.unshift(name)
 
     res.status(200).send(students)
+})
+
+app.get('/api/students/:idx', (req,res) => {
+    const idx = +req.params.idx;
+
+    if(idx < 0 || idx >= students.length) {
+        if (idx < 0) {
+            rollbar.error('someone tried to get an index less than 0')
+        } else {
+            rollbar.error('someone tried to get an index out of range')
+        }
+        return res.sendStatus(400);
+    }
+    res.status(200).send(students[idx])
 })
 
 app.delete('/api/students/:index', (req,res) => {
