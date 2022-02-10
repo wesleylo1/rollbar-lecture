@@ -16,7 +16,7 @@ const rollbar = new Rollbar({
 })
 
 // rollbar
-
+app.use(express.static(path.join(__dirname, '../public/')))
 app.use(express.json())
 
 const students = ['jimmy','jack','joe','jill']
